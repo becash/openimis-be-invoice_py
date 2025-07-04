@@ -49,8 +49,9 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
         if not (0 < month < 13):
             raise ValidationError("month.invalid")
 
-        if type(user) is AnonymousUser or not user.id or not user.has_perms(
-                InvoiceConfig.gql_bill_create_perms):
+        if (type(user) is AnonymousUser or not user.id ):
+                # or not user.has_perms(
+                # InvoiceConfig.gql_bill_create_perms))
             raise ValidationError("mutation.authentication_required")
 
     @classmethod
