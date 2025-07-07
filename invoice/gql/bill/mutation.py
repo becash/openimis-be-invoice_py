@@ -66,7 +66,7 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
 
         # Get all unpaid vouchers for the specified month (status AWAITING_PAYMENT)
         unpaid_vouchers = WorkerVoucher.objects.filter(
-            Q(status=WorkerVoucher.Status.AWAITING_PAYMENT) &
+            Q(status=WorkerVoucher.Status.ASSIGNED) &
             Q(assigned_date__year=current_year) &
             Q(assigned_date__month=month)
         ).filter(
