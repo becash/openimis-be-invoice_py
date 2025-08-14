@@ -56,8 +56,11 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
 
     @classmethod
     def _mutate(cls, user, month: int, economic_unit_code: int, **data):
-        # Get the current year
+        now = datetime.datetime.now()
+
         year = datetime.datetime.now().year
+        if now.month < month:
+            year -= 1
 
         policyholder = PolicyHolder.objects.filter(
             code=economic_unit_code,
