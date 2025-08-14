@@ -57,7 +57,7 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
     @classmethod
     def _mutate(cls, user, month: int, economic_unit_code: int, **data):
         # Get the current year
-        current_year = datetime.datetime.now().year
+        year = datetime.datetime.now().year
 
         policyholder = PolicyHolder.objects.filter(
             code=economic_unit_code,
@@ -67,7 +67,7 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
         # Get all unpaid vouchers for the specified month (status AWAITING_PAYMENT)
         unpaid_vouchers = WorkerVoucher.objects.filter(
             Q(status=WorkerVoucher.Status.ASSIGNED) &
-            Q(assigned_date__year=current_year) &
+            Q(assigned_date__year=year) &
             Q(assigned_date__month=month)
         ).filter(
             is_deleted=False,
@@ -81,7 +81,7 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
         voucher_ids = [voucher.id for voucher in unpaid_vouchers]
 
         with transaction.atomic():
-            create_voucher_bill(user, voucher_ids, policyholder.id)
+            create_voucher_bill(user, voucher_ids, policyholder.id, month, year)
         return None
 
     class Input(OpenIMISMutation.Input):

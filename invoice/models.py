@@ -190,7 +190,9 @@ class Bill(GenericInvoice):
     subject_id = models.CharField(db_column='SubjectId', max_length=255, blank=True, null=True)  # object is referenced by uuid
     subject = GenericForeignKey('subject_type', 'subject_id')
 
-    date_bill = DateField(db_column='DateBill', default=date.today,blank=True, null=True)
+    date_bill = DateField(db_column='DateBill', default=date.today, blank=True, null=True)
+    month = models.SmallIntegerField(db_column='Month', null=True)
+    year = models.SmallIntegerField(db_column='Year', null=True)
 
     class Meta:
         managed = True
