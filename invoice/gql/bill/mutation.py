@@ -71,7 +71,8 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
         unpaid_vouchers = WorkerVoucher.objects.filter(
             Q(status=WorkerVoucher.Status.ASSIGNED) &
             Q(assigned_date__year=year) &
-            Q(assigned_date__month=month)
+            Q(assigned_date__month=month) &
+            Q(bill_code=None)
         ).filter(
             is_deleted=False,
         ).filter(
