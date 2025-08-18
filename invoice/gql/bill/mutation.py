@@ -80,7 +80,7 @@ class CreateMonthBillMutation(BaseHistoryModelCreateMutationMixin, BaseMutation)
         )
 
         if not unpaid_vouchers.exists():
-            return None
+            raise ValidationError("mutation.no_vouchers_without_bill")
 
         voucher_ids = [voucher.id for voucher in unpaid_vouchers]
 
